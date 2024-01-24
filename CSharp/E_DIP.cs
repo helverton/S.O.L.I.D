@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Moq;
+using System;
+using Xunit;
 
 namespace S.O.L.I.D.CSharp
 {
@@ -14,7 +16,7 @@ namespace S.O.L.I.D.CSharp
         //Neste exemplo, temos duas classes de implementação de ILogger: FileLogger e ConsoleLogger. A classe OrderProcessor depende da abstração ILogger em vez 
         //de uma implementação concreta. Isso permite que a classe OrderProcessor seja facilmente estendida para usar outras implementações de ILogger no futuro, 
         //sem precisar modificar o código existente.
-
+        #region example
         interface ILogger
         {
             void Log(string message);
@@ -69,7 +71,7 @@ namespace S.O.L.I.D.CSharp
                 processor.Process(order);
             }
         }
-
+        #endregion
 
 
 
@@ -77,9 +79,8 @@ namespace S.O.L.I.D.CSharp
         //CadastroClienteOracleRepository são classes de baixo nível.A interface ICadastroClienteRepository é uma abstração que 
         //contém o método Salvar(), que é necessário para salvar as informações de um cliente.A classe CadastroClienteService é 
         //responsável por salvar as informações do cliente e depende da interface ICadastroClienteRepository em vez de depender diretamente das classes de baixo nível.
-
         //Dessa forma, podemos garantir que as classes de alto nível não dependam das classes de baixo nível, mas sim de abstrações.
-
+        #region example
         public class CadastroCliente
         {
             public string Nome { get; set; }
@@ -123,6 +124,7 @@ namespace S.O.L.I.D.CSharp
                 // Lógica para salvar no Oracle
             }
         }
+        #endregion
 
 
 
@@ -130,6 +132,7 @@ namespace S.O.L.I.D.CSharp
         //Isso permite que a classe CustomerRegistration seja desacoplada da implementação específica de envio de e-mail e, portanto, 
         //seja mais flexível e fácil de testar.A implementação real do envio de e-mail é injetada na classe CustomerRegistration por 
         //meio do construtor, seguindo o princípio de inversão de dependência.
+        #region example
         public interface IEmailSender
         {
             void SendEmail(string toAddress, string subject, string body);
@@ -160,5 +163,63 @@ namespace S.O.L.I.D.CSharp
                 _emailSender.SendEmail("to@example.com", "Subject", "Body");
             }
         }
+        #endregion
+
+
+
+        //Neste exemplo, a classe CustomerService é responsável por adicionar um novo cliente.Ela depende da interface ICustomerRepository 
+        //para salvar o cliente.Isso significa que a classe CustomerService não precisa saber como o cliente é salvo, apenas que ele é salvo.
+        //Isso torna a classe mais flexível e fácil de testar.
+        #region example
+        public interface ICustomerRepository
+        {
+            void Save(Customer customer);
+        }
+
+        public class Customer
+        {
+            public string Name { get; set; }
+            public string Email { get; set; }
+        }
+
+        public class CustomerService
+        {
+            private readonly ICustomerRepository _repository;
+
+            public CustomerService(ICustomerRepository repository)
+            {
+                _repository = repository;
+            }
+
+            public void AddCustomer(Customer customer)
+            {
+                _repository.Save(customer);
+            }
+        }
+        #endregion
+
+
+
+        //A classe CustomerServiceTests é um exemplo de um teste unitário automatizado para a classe CustomerService.
+        //Ele usa o framework de testes XUnit para criar um teste que verifica se o método AddCustomer salva o cliente corretamente.
+        #region example
+        public class CustomerServiceTests
+        {
+            [Fact]
+            public void AddCustomer_ShouldCallAddMethodOfCustomerRepository()
+            {
+                // Arrange
+                var customer = new Customer();
+                var mockCustomerRepository = new Mock<ICustomerRepository>();
+                var customerService = new CustomerService(mockCustomerRepository.Object);
+
+                // Act
+                customerService.AddCustomer(customer);
+
+                // Assert
+                mockCustomerRepository.Verify(x => x.Save(customer), Times.Once);
+            }
+        }
+        #endregion
     }
 }
