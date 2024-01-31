@@ -11,10 +11,15 @@ namespace S.O.L.I.D.CSharp
 
 
         //Nesse exemplo, temos uma classe abstrata Shape que define um método abstrato Area(). As classes Rectangle e Circle herdam da classe Shape e 
-        //implementam o método Area() de maneiras diferentes.A classe AreaCalculator é responsável por calcular a área total de uma lista de formas, independentemente do tipo de forma.
+        //implementam o método Area() de maneiras diferentes. A classe AreaCalculator é responsável por calcular a área total de uma lista de formas, independentemente do tipo de forma.
         //Observe que a classe AreaCalculator não precisa ser modificada para lidar com novos tipos de formas.Se você quiser adicionar uma nova forma, 
         //basta criar uma nova classe que herda da classe Shape e implementa o método Area(). A classe AreaCalculator pode lidar com essa nova forma sem precisar ser modificada.
 
+        //O modificador override é usado em C# para fornecer uma nova implementação de um método herdado de uma classe base. O método que é substituído 
+        //por uma declaração override é conhecido como o método base substituído. O método override deve ter a mesma assinatura que o método base substituído. 
+        //Em outras palavras, ele deve ter o mesmo nome, tipo de retorno e lista de parâmetros. O modificador override é necessário para estender ou 
+        //modificar a implementação abstrata ou virtual de um método, propriedade, indexador ou evento herdado.
+        
         public abstract class Shape
         {
             public abstract double Area();
