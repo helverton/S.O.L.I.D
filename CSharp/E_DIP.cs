@@ -69,6 +69,8 @@ namespace S.O.L.I.D.CSharp
 
                 Order order = new Order { Id = 1, CustomerName = "John Doe" };
                 processor.Process(order);
+
+                new OrderProcessor(new ConsoleLogger()).Process(new Order { Id = 1, CustomerName = "John Doe" });
             }
         }
         #endregion
